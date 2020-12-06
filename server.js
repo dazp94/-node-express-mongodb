@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const bodyParser = require("body-parser");
-//const cors = require("cors");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -10,11 +10,11 @@ const app = express();
 
 // enable for corsOptions
 
-// var corsOptions = {
-//   origin: "http://localhost:8081"
-// };
+var corsOptions = {
+  origin: "http://localhost:3000"
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));

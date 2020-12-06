@@ -1,7 +1,7 @@
 const { authJwt } = require("../middlewares");
-const controller = require("../controllers/item");
+const controller = require("../controllers/product");
 
-const ITEMS_ROUTE = "/api/items";
+const PRODUCTS_ROUTE = "/api/products";
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -12,20 +12,20 @@ module.exports = function (app) {
     next();
   });
 
-  app.get(`${ITEMS_ROUTE}/:name`, controller.getAllItemsByName);
+  app.get(`${PRODUCTS_ROUTE}/:name`, controller.getAllProductsByName);
 
-  app.get(ITEMS_ROUTE, controller.getAllItems);
+  app.get(PRODUCTS_ROUTE, controller.getAllProducts);
 
-  app.post(ITEMS_ROUTE, controller.createItem);
+  app.post(PRODUCTS_ROUTE, controller.createProduct);
 
   app.delete(
-    `${ITEMS_ROUTE}/:id`,
+    `${PRODUCTS_ROUTE}/:id`,
     [authJwt.verifyToken, authJwt.isAdmin],
-    controller.deleteItem
+    controller.deleteProduct
   );
   app.delete(
-    `${ITEMS_ROUTE}`,
+    `${PRODUCTS_ROUTE}`,
     [authJwt.verifyToken, authJwt.isAdmin],
-    controller.deleteItems
+    controller.deleteProducts
   );
 };

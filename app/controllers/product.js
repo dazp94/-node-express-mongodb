@@ -1,9 +1,10 @@
 const db = require("../models");
-const Item = db.item;
+const Product = db.product;
 
-const createItem = (req, res) => {
+const createProduct = (req, res) => {
   const name = req.body.name;
   const price = req.body.price;
+  const category = req.body.category;
 
   if (!name) {
     res.status(500).json({
@@ -23,18 +24,25 @@ const createItem = (req, res) => {
     });
     return;
   }
+  if (!category) {
+    res.status(500).json({
+      error: "No category was provided"
+    });
+    return;
+  }
 
-  const item = new Item({
+  const product = new Product({
     name,
-    price
+    price,
+    category
   });
 
-  item
+  product
     .save()
     .then(() => {
       res.status(200).json({
-        message: `Item created successfully`,
-        item
+        message: `Product created successfully`,
+        product
       });
     })
     .catch((err) => {
@@ -45,16 +53,16 @@ const createItem = (req, res) => {
     });
 };
 
-const deleteItem = (req, res) => {
-  Item.deleteOne({ _id: req.params.id })
+const deleteProduct = (req, res) => {
+  Product.deleteOne({ _id: req.params.id })
     .then((result) => {
       if (result.deletedCount) {
         res.status(200).json({
-          message: `Item with id ${req.params.id} deleted`
+          message: `Product with id ${req.params.id} deleted`
         });
       } else {
         res.status(400).json({
-          message: "No item found for the provided id"
+          message: "No product found for the provided id"
         });
       }
     })
@@ -66,11 +74,11 @@ const deleteItem = (req, res) => {
     });
 };
 
-const deleteItems = (req, res) => {
-  Item.deleteMany({ _id: { $in: req.body.ids } })
+const deleteProducts = (req, res) => {
+  Product.deleteMany({ _id: { $in: req.body.ids } })
     .then(() => {
       res.status(200).json({
-        message: "Items deleted successfully"
+        message: "Products deleted successfully"
       });
     })
     .catch((err) => {
@@ -81,8 +89,8 @@ const deleteItems = (req, res) => {
     });
 };
 
-const getAllItemsByName = (req, res) => {
-  Item.find({ name: { $regex: RegExp(req.params.name, "i") } })
+const getAllProductsByName = (req, res) => {
+  Product.find({ name: { $regex: RegExp(req.params.name, "i") } })
     .then((result) => {
       res.json(result);
     })
@@ -94,8 +102,8 @@ const getAllItemsByName = (req, res) => {
     });
 };
 
-const getAllItems = (req, res) => {
-  Item.find()
+const getAllProducts = (req, res) => {
+  Product.find()
     .then((result) => {
       res.json(result);
     })
@@ -108,9 +116,9 @@ const getAllItems = (req, res) => {
 };
 
 module.exports = {
-  createItem,
-  deleteItem,
-  deleteItems,
-  getAllItems,
-  getAllItemsByName
+  createProduct,
+  deleteProduct,
+  deleteProducts,
+  getAllProducts,
+  getAllProductsByName
 };

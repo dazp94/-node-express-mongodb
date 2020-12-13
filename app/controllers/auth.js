@@ -63,7 +63,7 @@ const signup = (req, res) => {
 
 const signin = (req, res) => {
   User.findOne({
-    username: req.body.username
+    email: req.body.email
   })
     .populate("roles", "-__v")
     .exec((err, user) => {
